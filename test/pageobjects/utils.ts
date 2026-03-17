@@ -1,8 +1,10 @@
 import constants from '../specs/constants.js';
+import https from 'https';
 
 export default {
   checkIsMyHoliday,
   isPast920JST,
+  sendTeamsMessage,
 };
 
 /**
@@ -48,4 +50,66 @@ async function isPast920JST() {
   const minutes = tokyoTime.getMinutes();
 
   return hours > 9 || (hours === 9 && minutes >= 20);
+}
+
+async function sendTeamsMessage(text: string) {
+  const webhook = constants.TEAMS_WEBHOOK_URL;
+
+  const data = JSON.stringify({
+      type: "message",
+      attachments: [
+          {
+              contentType: "application/vnd.microsoft.card.adaptive",
+              content: {
+                  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+                  type: "AdaptiveCard",
+                  version: "1.4",
+                  body: [
+                      {
+                          type: "TextBlock",
+                          text: "⚠️ KintaiPlus Bot",
+                          weight: "Bolder",
+                          size: "Medium",
+                          color: "Attention"
+                      },
+                      {
+                          type: "TextBlock",
+                          text: text,
+                          wrap: true
+                      }
+                  ],
+                  actions: [
+                      {
+                          type: "Action.OpenUrl",
+                          title: "打刻画面を開く",
+                          url: "https://kintaiplus.freee.co.jp/admin"
+                      }
+                  ]
+              }
+          }
+      ]
+  });
+
+  const url = new URL(webhook);
+
+  const options = {
+      hostname: url.hostname,
+      path: url.pathname + url.search,
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json",
+          "Content-Length": data.length
+      }
+  };
+
+  return new Promise((resolve, reject) => {
+      const req = https.request(options, res => {
+          res.on("data", () => {});
+          res.on("end", resolve);
+      });
+
+      req.on("error", reject);
+      req.write(data);
+      req.end();
+  });
 }

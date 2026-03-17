@@ -10,6 +10,9 @@ describe('KintaiPlus', () => {
 
         if (past920JST) {
             console.log("現在は9:20 JSTを過ぎています");
+            await Utils.sendTeamsMessage(
+                "現在は9:20 JSTを過ぎています。打刻がまだされていません。"
+            );
         } else if (!holiday) {
             console.log("今日は祝日ではありません");
             await LoginPage.open()
