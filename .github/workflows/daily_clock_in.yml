@@ -2,7 +2,7 @@ name: Daily Clock In
 
 on:
   schedule:
-    - cron: '50 23 * * 0-4'
+    - cron: "50 23 * * 0-4"
   workflow_dispatch:
 
 jobs:
@@ -10,14 +10,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 18
-    - name: Install Dependencies
-      run: npm install
-    - name: Test
-      run: ([ -z $KTP_ID ] || [ -z $KTP_PASSWORD ] || npm run clock_in)
-      env:
-        KTP_ID: ${{ secrets.KTP_ID }}
-        KTP_PASSWORD: ${{ secrets.KTP_PASSWORD }}
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Install Dependencies
+        run: npm install
+      - name: Test
+        run: ([ -z $KTP_ID ] || [ -z $KTP_PASSWORD ] || [ -z $TEAMS_WEBHOOK_URL ] || npm run clock_in)
+        env:
+          KTP_ID: ${{ secrets.KTP_ID }}
+          KTP_PASSWORD: ${{ secrets.KTP_PASSWORD }}
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}

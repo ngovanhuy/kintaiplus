@@ -14,5 +14,8 @@
     "wdio": "wdio run ./wdio.conf.ts",
     "clock_in": "npx wdio run ./wdio.conf.ts --spec clock_in.e2e.ts",
     "clock_out": "npx wdio run ./wdio.conf.ts --spec clock_out.e2e.ts"
+  },
+  "dependencies": {
+    "axios": "^1.13.6"
   }
 }

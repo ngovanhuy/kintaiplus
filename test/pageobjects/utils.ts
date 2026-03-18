@@ -1,5 +1,5 @@
+import axios from 'axios';
 import constants from '../specs/constants.js';
-import https from 'https';
 
 export default {
   checkIsMyHoliday,
@@ -82,7 +82,7 @@ async function sendTeamsMessage(text: string) {
                       {
                           type: "Action.OpenUrl",
                           title: "打刻画面を開く",
-                          url: "https://kintaiplus.freee.co.jp/admin"
+                          url: "https://kintaiplus.freee.co.jp/independent/recorder2/personal/"
                       }
                   ]
               }
@@ -90,26 +90,17 @@ async function sendTeamsMessage(text: string) {
       ]
   });
 
-  const url = new URL(webhook);
 
-  const options = {
-      hostname: url.hostname,
-      path: url.pathname + url.search,
-      method: "POST",
+  try {
+    console.log("Sending teams message: " + text);
+    const response = await axios.post(webhook, data, {
       headers: {
-          "Content-Type": "application/json",
-          "Content-Length": data.length
+        "Content-Type": "application/json"
       }
-  };
-
-  return new Promise((resolve, reject) => {
-      const req = https.request(options, res => {
-          res.on("data", () => {});
-          res.on("end", resolve);
-      });
-
-      req.on("error", reject);
-      req.write(data);
-      req.end();
-  });
+    });
+    console.log('Response Status:', response.status);
+    console.log('Response Data:', response.data);
+  } catch (error) {
+    console.error('Error:', error);
+  }
 }
