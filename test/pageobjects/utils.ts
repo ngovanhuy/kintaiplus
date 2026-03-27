@@ -68,14 +68,14 @@ async function sendTeamsMessage(text: string, isWarning: boolean = false) {
       },
       {
         type: "TextBlock",
-        text: text,
+        text: `<at>FinbertMDS</at> ${text}`,
         wrap: true
       })
   } else {
     bodyList.push(
       {
         type: "TextBlock",
-        text: text,
+        text: `<at>FinbertMDS</at> ${text}`,
         wrap: true
       })
   }
@@ -91,6 +91,17 @@ async function sendTeamsMessage(text: string, isWarning: boolean = false) {
     )
   }
 
+  const mentionedList = [
+    {
+      type: "mention",
+      text: "<at>FinbertMDS</at>",
+      mentioned: {
+        id: "huynv5@rikkeisoft.com",
+        name: "FinbertMDS"
+      }
+    }
+  ];
+
   const data = JSON.stringify({
     type: "message",
     attachments: [
@@ -101,12 +112,14 @@ async function sendTeamsMessage(text: string, isWarning: boolean = false) {
           type: "AdaptiveCard",
           version: "1.4",
           body: bodyList,
-          actions: actionList
+          actions: actionList,
+          msteams: {
+            entities: mentionedList
+          }
         }
       }
     ]
   });
-
 
   try {
     console.log("Sending teams message: " + text);
