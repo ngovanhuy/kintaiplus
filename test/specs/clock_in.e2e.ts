@@ -11,7 +11,8 @@ describe('KintaiPlus', () => {
         if (past920JST) {
             console.log("現在は9:20 JSTを過ぎています");
             await Utils.sendTeamsMessage(
-                "現在は9:20 JSTを過ぎています。打刻がまだされていません。"
+                "現在は9:20 JSTを過ぎています。打刻がまだされていません。",
+                true
             );
             await browser.pause(5000);
         } else if (!holiday) {
@@ -21,9 +22,13 @@ describe('KintaiPlus', () => {
             await browser.pause(5000);
             console.log("start clock in");
             await LoginPage.clockIn();
+            await browser.pause(1000);
+            await Utils.sendTeamsMessage(
+                "打刻が完了しました。"
+            );
             await browser.pause(5000);
         } else {
-            console.log("今日休み");
+            console.log("今日は休みです");
         }
     })
 })

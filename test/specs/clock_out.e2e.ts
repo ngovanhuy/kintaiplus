@@ -13,9 +13,13 @@ describe('KintaiPlus', () => {
             await browser.pause(5000);
             console.log("start clock out");
             await LoginPage.clockOut();
+            await browser.pause(1000);
+            await Utils.sendTeamsMessage(
+                "退勤打刻が完了しました。"
+            );
             await browser.pause(5000);
         } else {
-            console.log("今日休み");
+            console.log("今日は休みです");
         }
     })
 })
