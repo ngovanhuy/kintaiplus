@@ -2,7 +2,7 @@ name: Daily Clock In
 
 on:
   schedule:
-    - cron: "25 23 * * 0-4"
+    - cron: "35 23 * * 0-4"
   workflow_dispatch:
 
 jobs:
@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 18
       - name: Install Dependencies
         run: npm install
       - name: Test
